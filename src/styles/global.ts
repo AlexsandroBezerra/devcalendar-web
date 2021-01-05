@@ -1,10 +1,6 @@
 import { createGlobalStyle } from 'styled-components'
 
 export default createGlobalStyle`
-  :root {
-    font-size: 60%;
-  }
-
   * {
     margin: 0;
     padding: 0;
@@ -19,20 +15,17 @@ export default createGlobalStyle`
 
   body, input, button {
     font-family: 'Roboto', sans-serif;
-    font-size: 1.6rem;
+    font-size: 16px;
   }
 
   h1, h2, h3, h4, h5, h6, strong {
     font-weight: 500;
+    font-family: 'Roboto Condensed', sans-serif;
+    color: #000
+
   }
 
   button {
     cursor: pointer;
-  }
-
-  @media(min-width: 700px) {
-    :root {
-      font-size: 62.5%;
-    }
   }
 `
