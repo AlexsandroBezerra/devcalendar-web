@@ -58,7 +58,7 @@ export const Content = styled.main`
 
     a {
       display: block;
-      margin-top: 32px;
+      margin: 32px 0 80px;
       text-decoration: none;
       text-align: center;
       color: ${props => props.theme.text};

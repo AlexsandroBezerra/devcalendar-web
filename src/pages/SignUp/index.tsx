@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { FiLogIn, FiMail, FiLock } from 'react-icons/fi'
+import { FiMail, FiLock, FiUser, FiArrowLeft } from 'react-icons/fi'
 import { Link } from 'react-router-dom'
 
 import calendarImg from '../../assets/calendar.svg'
@@ -17,29 +17,28 @@ const SignIn: React.FC = () => {
 
   return (
     <Container>
+      <Content>
+        <h1>Sign Up</h1>
+
+        <form onSubmit={handleSubmit}>
+          <Input icon={FiUser} placeholder="Name" />
+          <Input icon={FiMail} placeholder="E-mail" />
+          <Input icon={FiLock} type="password" placeholder="Password" />
+
+          <button type="submit">Create account</button>
+        </form>
+
+        <Link to="/">
+          <FiArrowLeft />
+          Back to login
+        </Link>
+      </Content>
+
       <Background>
         <img src={logoImg} alt="DevCalendar" />
 
         <img src={calendarImg} alt="A calendar" />
       </Background>
-
-      <Content>
-        <h1>Sign In</h1>
-
-        <form onSubmit={handleSubmit}>
-          <Input icon={FiMail} placeholder="E-mail" />
-          <Input icon={FiLock} type="password" placeholder="Password" />
-
-          <button type="submit">Enter</button>
-
-          <Link to="/">Forgot my Password</Link>
-        </form>
-
-        <Link to="/sign-up">
-          <FiLogIn />
-          Create Account
-        </Link>
-      </Content>
     </Container>
   )
 }
