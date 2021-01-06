@@ -8,17 +8,20 @@ import { Form } from '@unform/web'
 import calendarImg from '../../assets/calendar.svg'
 import logoImg from '../../assets/logo.svg'
 import Input from '../../components/Input'
+import api from '../../services/api'
 
 import { Container, Background, Content } from './styles'
 
-interface SignInFormData {
+interface FormData {
   email: string
   password: string
 }
 
 const SignIn: React.FC = () => {
-  const handleSubmit: SubmitHandler<SignInFormData> = useCallback(data => {
-    console.log(data)
+  const handleSubmit: SubmitHandler<FormData> = useCallback(async data => {
+    const response = await api.post('sessions', data)
+
+    console.log(response)
   }, [])
 
   return (
