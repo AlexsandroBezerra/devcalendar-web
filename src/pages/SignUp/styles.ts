@@ -26,10 +26,10 @@ export const Background = styled.div`
   }
 `
 
-const appearFromRight = keyframes`
+const appearFromLeft = keyframes`
   from {
     opacity: 0;
-    transform: translateX(-50px);
+    transform: translateX(50px);
   }
 
   to {
@@ -39,7 +39,7 @@ const appearFromRight = keyframes`
 `
 
 export const Content = styled.main`
-  animation: ${appearFromRight} 1s;
+  animation: ${appearFromLeft} 1s;
   width: 352px;
 
   h1 {

@@ -1,6 +1,6 @@
-import React, { useCallback, useRef } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import { FiMail, FiLock, FiUser, FiArrowLeft } from 'react-icons/fi'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 
 import { FormHandles, SubmitHandler } from '@unform/core'
 import { Form } from '@unform/web'
@@ -8,7 +8,9 @@ import * as Yup from 'yup'
 
 import calendarImg from '../../assets/calendar.svg'
 import logoImg from '../../assets/logo.svg'
+import Button from '../../components/Button'
 import Input from '../../components/Input'
+import { useToast } from '../../hooks/Toast'
 import api from '../../services/api'
 import getValidationErrors from '../../utils/getValidationErrors'
 
@@ -21,33 +23,54 @@ interface FormData {
 }
 
 const SignIn: React.FC = () => {
+  const [isLoading, setIsLoading] = useState(false)
   const formRef = useRef<FormHandles>(null)
 
-  const handleSubmit: SubmitHandler<FormData> = useCallback(async data => {
-    try {
-      const schema = Yup.object().shape({
-        name: Yup.string().required(),
-        email: Yup.string().email().required(),
-        password: Yup.string().min(6).required()
-      })
+  const history = useHistory()
+  const { addToast } = useToast()
 
-      await schema.validate(data, {
-        abortEarly: false
-      })
+  const handleSubmit: SubmitHandler<FormData> = useCallback(
+    async data => {
+      try {
+        setIsLoading(true)
 
-      const response = await api.post('users', data)
+        const schema = Yup.object().shape({
+          name: Yup.string().required(),
+          email: Yup.string().email().required(),
+          password: Yup.string().min(6).required()
+        })
 
-      console.log(response)
-    } catch (err) {
-      if (err instanceof Yup.ValidationError) {
-        const errors = getValidationErrors(err)
+        await schema.validate(data, {
+          abortEarly: false
+        })
 
-        formRef.current?.setData(errors)
+        await api.post('users', data)
 
-        console.log(errors)
+        addToast({
+          type: 'success',
+          title: 'Registration completed',
+          description: 'You can now login to DevCalendar!'
+        })
+
+        history.push('/')
+      } catch (err) {
+        if (err instanceof Yup.ValidationError) {
+          const errors = getValidationErrors(err)
+
+          formRef.current?.setData(errors)
+        }
+
+        addToast({
+          type: 'error',
+          title: 'Registration Error',
+          description: 'An error occurred while registering, please try again.'
+        })
+      } finally {
+        setIsLoading(false)
       }
-    }
-  }, [])
+    },
+    [addToast, history]
+  )
 
   return (
     <Container>
@@ -65,7 +88,9 @@ const SignIn: React.FC = () => {
             placeholder="Password"
           />
 
-          <button type="submit">Create account</button>
+          <Button type="submit" loading={isLoading}>
+            Create account
+          </Button>
         </Form>
 
         <Link to="/">

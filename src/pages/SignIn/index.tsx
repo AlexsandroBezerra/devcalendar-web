@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import { FiLogIn, FiMail, FiLock } from 'react-icons/fi'
 import { Link } from 'react-router-dom'
 
@@ -8,7 +8,9 @@ import * as Yup from 'yup'
 
 import calendarImg from '../../assets/calendar.svg'
 import logoImg from '../../assets/logo.svg'
+import Button from '../../components/Button'
 import Input from '../../components/Input'
+import { useToast } from '../../hooks/Toast'
 import api from '../../services/api'
 import getValidationErrors from '../../utils/getValidationErrors'
 
@@ -20,32 +22,51 @@ interface FormData {
 }
 
 const SignIn: React.FC = () => {
+  const [isLoading, setIsLoading] = useState(false)
   const formRef = useRef<FormHandles>(null)
 
-  const handleSubmit: SubmitHandler<FormData> = useCallback(async data => {
-    try {
-      const schema = Yup.object().shape({
-        email: Yup.string().email().required(),
-        password: Yup.string().min(6).required()
-      })
+  const { addToast } = useToast()
 
-      await schema.validate(data, {
-        abortEarly: false
-      })
+  const handleSubmit: SubmitHandler<FormData> = useCallback(
+    async data => {
+      try {
+        setIsLoading(true)
 
-      const response = await api.post('sessions', data)
+        const schema = Yup.object().shape({
+          email: Yup.string().email().required(),
+          password: Yup.string().required()
+        })
 
-      console.log(response)
-    } catch (err) {
-      if (err instanceof Yup.ValidationError) {
-        const errors = getValidationErrors(err)
+        await schema.validate(data, {
+          abortEarly: false
+        })
 
-        console.log(errors)
+        await api.post('sessions', data)
 
-        formRef.current?.setErrors(errors)
+        addToast({
+          type: 'success',
+          title: 'Authentication success',
+          description: 'The app is coming soon...'
+        })
+      } catch (err) {
+        if (err instanceof Yup.ValidationError) {
+          const errors = getValidationErrors(err)
+
+          return formRef.current?.setErrors(errors)
+        }
+
+        addToast({
+          type: 'error',
+          title: 'Authentication error',
+          description:
+            'An error occurred while logging in, check your credentials.'
+        })
+      } finally {
+        setIsLoading(false)
       }
-    }
-  }, [])
+    },
+    [addToast]
+  )
 
   return (
     <Container>
@@ -68,7 +89,9 @@ const SignIn: React.FC = () => {
             placeholder="Password"
           />
 
-          <button type="submit">Enter</button>
+          <Button type="submit" loading={isLoading}>
+            Enter
+          </Button>
 
           <Link to="/">Forgot my Password</Link>
         </Form>
