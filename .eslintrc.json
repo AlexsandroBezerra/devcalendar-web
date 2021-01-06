@@ -41,7 +41,8 @@
         "groups": [
           "/^react/",
           "module",
-          ["parent", "sibling", "index"]
+          ["parent", "sibling", "index"],
+          "/.\/styles/"
         ],
         "alphabetize": { "order": "asc", "ignoreCase": true }
       }

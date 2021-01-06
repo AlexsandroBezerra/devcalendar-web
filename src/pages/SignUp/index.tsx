@@ -2,31 +2,44 @@ import React, { useCallback } from 'react'
 import { FiMail, FiLock, FiUser, FiArrowLeft } from 'react-icons/fi'
 import { Link } from 'react-router-dom'
 
+import { SubmitHandler } from '@unform/core'
+import { Form } from '@unform/web'
+
 import calendarImg from '../../assets/calendar.svg'
 import logoImg from '../../assets/logo.svg'
 import Input from '../../components/Input'
+
 import { Container, Background, Content } from './styles'
 
+interface SignUpFormData {
+  name: string
+  email: string
+  password: string
+}
+
 const SignIn: React.FC = () => {
-  const handleSubmit = useCallback(
-    (event: React.FormEvent<HTMLFormElement>) => {
-      event.preventDefault()
-    },
-    []
-  )
+  const handleSubmit: SubmitHandler<SignUpFormData> = useCallback(data => {
+    console.log(data)
+  }, [])
 
   return (
     <Container>
       <Content>
         <h1>Sign Up</h1>
 
-        <form onSubmit={handleSubmit}>
-          <Input icon={FiUser} placeholder="Name" />
-          <Input icon={FiMail} placeholder="E-mail" />
-          <Input icon={FiLock} type="password" placeholder="Password" />
+        <Form onSubmit={handleSubmit}>
+          <Input name="name" icon={FiUser} placeholder="Name" />
+          <Input name="email" icon={FiMail} placeholder="E-mail" />
+
+          <Input
+            name="password"
+            icon={FiLock}
+            type="password"
+            placeholder="Password"
+          />
 
           <button type="submit">Create account</button>
-        </form>
+        </Form>
 
         <Link to="/">
           <FiArrowLeft />
