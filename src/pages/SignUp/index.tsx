@@ -35,9 +35,13 @@ const SignIn: React.FC = () => {
         setIsLoading(true)
 
         const schema = Yup.object().shape({
-          name: Yup.string().required(),
-          email: Yup.string().email().required(),
-          password: Yup.string().min(6).required()
+          name: Yup.string().required('Name is required'),
+          email: Yup.string()
+            .email('It is not a valid email')
+            .required('Email is required'),
+          password: Yup.string()
+            .min(6, 'Password must be at least 6 characters')
+            .required('Password is required')
         })
 
         await schema.validate(data, {
@@ -57,7 +61,7 @@ const SignIn: React.FC = () => {
         if (err instanceof Yup.ValidationError) {
           const errors = getValidationErrors(err)
 
-          formRef.current?.setData(errors)
+          return formRef.current?.setErrors(errors)
         }
 
         addToast({
@@ -78,12 +82,12 @@ const SignIn: React.FC = () => {
         <h1>Sign Up</h1>
 
         <Form ref={formRef} onSubmit={handleSubmit}>
-          <Input name="name" icon={FiUser} placeholder="Name" />
-          <Input name="email" icon={FiMail} placeholder="E-mail" />
+          <Input icon={FiUser} name="name" placeholder="Name" />
+          <Input icon={FiMail} name="email" placeholder="E-mail" />
 
           <Input
-            name="password"
             icon={FiLock}
+            name="password"
             type="password"
             placeholder="Password"
           />

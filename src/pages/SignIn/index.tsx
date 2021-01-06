@@ -33,8 +33,10 @@ const SignIn: React.FC = () => {
         setIsLoading(true)
 
         const schema = Yup.object().shape({
-          email: Yup.string().email().required(),
-          password: Yup.string().required()
+          email: Yup.string()
+            .email('It is not a valid email')
+            .required('Email is required'),
+          password: Yup.string().required('Password is required')
         })
 
         await schema.validate(data, {
