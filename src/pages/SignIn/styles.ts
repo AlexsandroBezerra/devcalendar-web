@@ -1,5 +1,5 @@
 import { shade, lighten } from 'polished'
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 
 export const Container = styled.div`
   height: 100vh;
@@ -26,7 +26,20 @@ export const Background = styled.div`
   }
 `
 
+const appearFromLeft = keyframes`
+  from {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0px);
+  }
+`
+
 export const Content = styled.main`
+  animation: ${appearFromLeft} 1s;
   width: 352px;
 
   h1 {
