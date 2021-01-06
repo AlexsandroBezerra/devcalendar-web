@@ -1,14 +1,16 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useRef } from 'react'
 import { FiLogIn, FiMail, FiLock } from 'react-icons/fi'
 import { Link } from 'react-router-dom'
 
-import { SubmitHandler } from '@unform/core'
+import { FormHandles, SubmitHandler } from '@unform/core'
 import { Form } from '@unform/web'
+import * as Yup from 'yup'
 
 import calendarImg from '../../assets/calendar.svg'
 import logoImg from '../../assets/logo.svg'
 import Input from '../../components/Input'
 import api from '../../services/api'
+import getValidationErrors from '../../utils/getValidationErrors'
 
 import { Container, Background, Content } from './styles'
 
@@ -18,10 +20,31 @@ interface FormData {
 }
 
 const SignIn: React.FC = () => {
-  const handleSubmit: SubmitHandler<FormData> = useCallback(async data => {
-    const response = await api.post('sessions', data)
+  const formRef = useRef<FormHandles>(null)
 
-    console.log(response)
+  const handleSubmit: SubmitHandler<FormData> = useCallback(async data => {
+    try {
+      const schema = Yup.object().shape({
+        email: Yup.string().email().required(),
+        password: Yup.string().min(6).required()
+      })
+
+      await schema.validate(data, {
+        abortEarly: false
+      })
+
+      const response = await api.post('sessions', data)
+
+      console.log(response)
+    } catch (err) {
+      if (err instanceof Yup.ValidationError) {
+        const errors = getValidationErrors(err)
+
+        console.log(errors)
+
+        formRef.current?.setErrors(errors)
+      }
+    }
   }, [])
 
   return (
@@ -35,7 +58,7 @@ const SignIn: React.FC = () => {
       <Content>
         <h1>Sign In</h1>
 
-        <Form onSubmit={handleSubmit}>
+        <Form ref={formRef} onSubmit={handleSubmit}>
           <Input icon={FiMail} name="email" placeholder="E-mail" />
 
           <Input
