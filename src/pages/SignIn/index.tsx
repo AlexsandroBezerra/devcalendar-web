@@ -1,6 +1,6 @@
 import React, { useCallback, useRef, useState } from 'react'
 import { FiLogIn, FiMail, FiLock } from 'react-icons/fi'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 
 import { FormHandles, SubmitHandler } from '@unform/core'
 import { Form } from '@unform/web'
@@ -10,8 +10,8 @@ import calendarImg from '../../assets/calendar.svg'
 import logoImg from '../../assets/logo.svg'
 import Button from '../../components/Button'
 import Input from '../../components/Input'
+import { useAuth } from '../../hooks/Auth'
 import { useToast } from '../../hooks/Toast'
-import api from '../../services/api'
 import getValidationErrors from '../../utils/getValidationErrors'
 
 import { Container, Background, Content } from './styles'
@@ -25,6 +25,9 @@ const SignIn: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false)
   const formRef = useRef<FormHandles>(null)
 
+  const history = useHistory()
+
+  const { signIn } = useAuth()
   const { addToast } = useToast()
 
   const handleSubmit: SubmitHandler<FormData> = useCallback(
@@ -43,13 +46,18 @@ const SignIn: React.FC = () => {
           abortEarly: false
         })
 
-        await api.post('sessions', data)
+        await signIn({
+          email: data.email,
+          password: data.password
+        })
 
         addToast({
           type: 'success',
           title: 'Authentication success',
           description: 'The app is coming soon...'
         })
+
+        history.push('/app')
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           const errors = getValidationErrors(err)
@@ -67,7 +75,7 @@ const SignIn: React.FC = () => {
         setIsLoading(false)
       }
     },
-    [addToast]
+    [addToast, history, signIn]
   )
 
   return (
