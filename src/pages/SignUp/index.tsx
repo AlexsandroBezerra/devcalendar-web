@@ -22,7 +22,7 @@ interface FormData {
   password: string
 }
 
-const SignIn: React.FC = () => {
+const SignUp: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false)
   const formRef = useRef<FormHandles>(null)
 
@@ -112,4 +112,4 @@ const SignIn: React.FC = () => {
   )
 }
 
-export default SignIn
+export default SignUp

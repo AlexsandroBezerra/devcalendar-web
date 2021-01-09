@@ -1,6 +1,6 @@
 import React, { useCallback, useRef, useState } from 'react'
-import { FiLogIn, FiMail, FiLock } from 'react-icons/fi'
-import { Link, useHistory } from 'react-router-dom'
+import { FiMail, FiArrowLeft } from 'react-icons/fi'
+import { Link } from 'react-router-dom'
 
 import { FormHandles, SubmitHandler } from '@unform/core'
 import { Form } from '@unform/web'
@@ -10,54 +10,48 @@ import calendarImg from '../../assets/calendar.svg'
 import logoImg from '../../assets/logo.svg'
 import Button from '../../components/Button'
 import Input from '../../components/Input'
-import { useAuth } from '../../hooks/Auth'
 import { useToast } from '../../hooks/Toast'
+// import api from '../../services/api'
 import getValidationErrors from '../../utils/getValidationErrors'
 
 import { Container, Background, Content } from './styles'
 
 interface FormData {
+  name: string
   email: string
   password: string
 }
 
-const SignIn: React.FC = () => {
+const ForgotPassword: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false)
   const formRef = useRef<FormHandles>(null)
 
-  const history = useHistory()
-
-  const { signIn } = useAuth()
   const { addToast } = useToast()
 
   const handleSubmit: SubmitHandler<FormData> = useCallback(
     async data => {
       try {
         setIsLoading(true)
+        formRef.current?.setErrors({})
 
         const schema = Yup.object().shape({
           email: Yup.string()
             .email('It is not a valid email')
-            .required('Email is required'),
-          password: Yup.string().required('Password is required')
+            .required('Email is required')
         })
 
         await schema.validate(data, {
           abortEarly: false
         })
 
-        await signIn({
-          email: data.email,
-          password: data.password
-        })
+        // await api.post('users', data)
 
         addToast({
           type: 'success',
-          title: 'Authentication success',
-          description: 'The app is coming soon...'
+          title: 'Recovery email sent',
+          description:
+            'We sent an email to confirm password recovery, check your inbox.'
         })
-
-        history.push('/app')
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           const errors = getValidationErrors(err)
@@ -67,52 +61,43 @@ const SignIn: React.FC = () => {
 
         addToast({
           type: 'error',
-          title: 'Authentication error',
+          title: 'Password recovery error',
           description:
-            'An error occurred while logging in, check your credentials.'
+            'An error occurred while trying to recover your password, please try again.'
         })
       } finally {
         setIsLoading(false)
       }
     },
-    [addToast, history, signIn]
+    [addToast]
   )
 
   return (
     <Container>
+      <Content>
+        <h1>Reset Password</h1>
+
+        <Form ref={formRef} onSubmit={handleSubmit}>
+          <Input icon={FiMail} name="email" placeholder="E-mail" />
+
+          <Button type="submit" loading={isLoading}>
+            Create account
+          </Button>
+        </Form>
+
+        <Link to="/">
+          <FiArrowLeft />
+          Back to login
+        </Link>
+      </Content>
+
       <Background>
         <img src={logoImg} alt="DevCalendar" />
 
         <img src={calendarImg} alt="A calendar" />
       </Background>
-
-      <Content>
-        <h1>Sign In</h1>
-
-        <Form ref={formRef} onSubmit={handleSubmit}>
-          <Input icon={FiMail} name="email" placeholder="E-mail" />
-
-          <Input
-            icon={FiLock}
-            name="password"
-            type="password"
-            placeholder="Password"
-          />
-
-          <Button type="submit" loading={isLoading}>
-            Enter
-          </Button>
-
-          <Link to="/forgot-password">Forgot my Password</Link>
-        </Form>
-
-        <Link to="/sign-up">
-          <FiLogIn />
-          Create Account
-        </Link>
-      </Content>
     </Container>
   )
 }
 
-export default SignIn
+export default ForgotPassword
