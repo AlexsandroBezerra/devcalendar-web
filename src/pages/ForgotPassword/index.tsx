@@ -1,6 +1,6 @@
 import React, { useCallback, useRef, useState } from 'react'
 import { FiMail, FiArrowLeft } from 'react-icons/fi'
-import { Link } from 'react-router-dom'
+import { Link, useHistory } from 'react-router-dom'
 
 import { FormHandles, SubmitHandler } from '@unform/core'
 import { Form } from '@unform/web'
@@ -17,9 +17,7 @@ import getValidationErrors from '../../utils/getValidationErrors'
 import { Container, Background, Content } from './styles'
 
 interface FormData {
-  name: string
   email: string
-  password: string
 }
 
 const ForgotPassword: React.FC = () => {
@@ -27,12 +25,12 @@ const ForgotPassword: React.FC = () => {
   const formRef = useRef<FormHandles>(null)
 
   const { addToast } = useToast()
+  const history = useHistory()
 
   const handleSubmit: SubmitHandler<FormData> = useCallback(
     async data => {
       try {
         setIsLoading(true)
-        formRef.current?.setErrors({})
 
         const schema = Yup.object().shape({
           email: Yup.string()
@@ -52,6 +50,8 @@ const ForgotPassword: React.FC = () => {
           description:
             'We sent an email to confirm password recovery, check your inbox.'
         })
+
+        history.push('/')
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
           const errors = getValidationErrors(err)
@@ -69,7 +69,7 @@ const ForgotPassword: React.FC = () => {
         setIsLoading(false)
       }
     },
-    [addToast]
+    [addToast, history]
   )
 
   return (
