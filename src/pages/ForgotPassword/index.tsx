@@ -11,7 +11,7 @@ import logoImg from '../../assets/logo.svg'
 import Button from '../../components/Button'
 import Input from '../../components/Input'
 import { useToast } from '../../hooks/Toast'
-// import api from '../../services/api'
+import api from '../../services/api'
 import getValidationErrors from '../../utils/getValidationErrors'
 
 import { Container, Background, Content } from './styles'
@@ -42,7 +42,7 @@ const ForgotPassword: React.FC = () => {
           abortEarly: false
         })
 
-        // await api.post('users', data)
+        await api.post('password/forgot', data)
 
         addToast({
           type: 'success',

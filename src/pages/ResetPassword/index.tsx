@@ -9,7 +9,9 @@ import * as Yup from 'yup'
 import logoImg from '../../assets/logo.svg'
 import Button from '../../components/Button'
 import Input from '../../components/Input'
+import useQuery from '../../hooks/Query'
 import { useToast } from '../../hooks/Toast'
+import api from '../../services/api'
 import getValidationErrors from '../../utils/getValidationErrors'
 
 import { Container } from './styles'
@@ -24,6 +26,7 @@ const ResetPassword: React.FC = () => {
   const formRef = useRef<FormHandles>(null)
 
   const history = useHistory()
+  const query = useQuery()
 
   const { addToast } = useToast()
 
@@ -44,6 +47,18 @@ const ResetPassword: React.FC = () => {
           abortEarly: false
         })
 
+        const token = query.get('token')
+
+        if (!token) {
+          throw new Error()
+        }
+
+        await api.post('password/reset', {
+          token,
+          password: data.password,
+          passwordConfirmation: data.passwordConfirmation
+        })
+
         history.push('/')
       } catch (err) {
         if (err instanceof Yup.ValidationError) {
@@ -62,7 +77,7 @@ const ResetPassword: React.FC = () => {
         setIsLoading(false)
       }
     },
-    [addToast, history]
+    [addToast, history, query]
   )
 
   return (
