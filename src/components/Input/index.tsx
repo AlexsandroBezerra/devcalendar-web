@@ -1,4 +1,9 @@
-import React, { InputHTMLAttributes, useEffect, useRef } from 'react'
+import React, {
+  InputHTMLAttributes,
+  useCallback,
+  useEffect,
+  useRef
+} from 'react'
 import { IconBaseProps } from 'react-icons'
 import { FiAlertCircle } from 'react-icons/fi'
 
@@ -17,6 +22,10 @@ const Input: React.FC<InputProps> = ({ name, icon: Icon, ...rest }) => {
 
   const { registerField, defaultValue, fieldName, error } = useField(name)
 
+  const handleFocus = useCallback(() => {
+    inputRef.current?.focus()
+  }, [])
+
   useEffect(() => {
     registerField({
       name: fieldName,
@@ -26,7 +35,7 @@ const Input: React.FC<InputProps> = ({ name, icon: Icon, ...rest }) => {
   }, [fieldName, registerField])
 
   return (
-    <Container error={Number(!!error)}>
+    <Container error={Number(!!error)} onClick={handleFocus}>
       {Icon && <Icon size={20} />}
       <input {...rest} defaultValue={defaultValue} ref={inputRef} />
 

@@ -11,6 +11,7 @@ export const Container = styled.div<ContainerProps>`
   border-radius: 20px;
   padding: 16px;
   width: 100%;
+  cursor: text;
 
   display: flex;
   align-items: center;

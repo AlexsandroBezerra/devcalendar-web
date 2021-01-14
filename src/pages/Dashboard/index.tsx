@@ -63,7 +63,7 @@ const Dashboard: React.FC = () => {
             />
           </Calendar>
 
-          <Link to="/app">
+          <Link to="/create-event">
             Add new Event
             <FiPlus />
           </Link>

@@ -1,6 +1,7 @@
 import React from 'react'
 import { Switch } from 'react-router-dom'
 
+import CreateEvent from '../pages/CreateEvent'
 import Dashboard from '../pages/Dashboard'
 import ForgotPassword from '../pages/ForgotPassword'
 import ResetPassword from '../pages/ResetPassword'
@@ -16,6 +17,7 @@ const Routes: React.FC = () => (
     <Route path="/reset-password" component={ResetPassword} />
 
     <Route path="/app" component={Dashboard} isPrivate />
+    <Route path="/create-event" component={CreateEvent} isPrivate />
   </Switch>
 )
 
