@@ -41,7 +41,8 @@ export const Header = styled.header`
 
 export const Content = styled.div`
   max-width: 736px;
-  margin: 32px auto 64px;
+  margin: 32px auto;
+  padding-bottom: 48px;
 
   button {
     svg {

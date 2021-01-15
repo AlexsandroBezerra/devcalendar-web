@@ -52,7 +52,6 @@ const CreateEvent: React.FC = () => {
     async data => {
       try {
         setIsLoading(true)
-        console.log(data)
 
         const [year, month, day] = data.date.split('-').map(Number)
 

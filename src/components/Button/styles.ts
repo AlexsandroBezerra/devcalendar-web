@@ -29,6 +29,5 @@ export const Container = styled.button<ContainerProps>`
     props.loading &&
     css`
       cursor: not-allowed;
-      background: red;
     `}
 `

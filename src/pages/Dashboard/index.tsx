@@ -1,10 +1,12 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import DayPicker from 'react-day-picker'
 import { FiPlus, FiInfo } from 'react-icons/fi'
+import Loader from 'react-loader-spinner'
 import { Link } from 'react-router-dom'
 
 import { format } from 'date-fns'
 
+import catImg from '../../assets/cat.svg'
 import logoImg from '../../assets/logo.svg'
 import { useAuth } from '../../hooks/Auth'
 import api from '../../services/api'
@@ -19,7 +21,8 @@ import {
   Calendar,
   Main,
   EventsList,
-  Event
+  Event,
+  LoaderContainer
 } from './styles'
 
 interface Event {
@@ -32,9 +35,12 @@ interface Event {
 const Dashboard: React.FC = () => {
   const { user, signOut } = useAuth()
   const [selectedDate, setSelectedDate] = useState(new Date())
+  const [isLoading, setIsLoading] = useState(true)
   const [events, setEvents] = useState<Event[]>([])
 
   useEffect(() => {
+    setIsLoading(true)
+
     api
       .get('events', {
         params: {
@@ -43,6 +49,7 @@ const Dashboard: React.FC = () => {
       })
       .then(response => {
         setEvents(response.data)
+        setIsLoading(false)
       })
   }, [selectedDate])
 
@@ -110,18 +117,32 @@ const Dashboard: React.FC = () => {
           </div>
 
           <EventsList>
-            {formattedEvents.map(event => (
-              <Event key={event.id}>
-                <strong>{event.title}</strong>
+            {!isLoading &&
+              formattedEvents.map(event => (
+                <Event key={event.id}>
+                  <strong>{event.title}</strong>
 
-                <div>
-                  <span>
-                    {event.from && event.to && `${event.from} - ${event.to}`}
-                  </span>
-                  <FiInfo size={20} />
-                </div>
-              </Event>
-            ))}
+                  <div>
+                    <span>
+                      {event.from && event.to && `${event.from} - ${event.to}`}
+                    </span>
+                    <FiInfo size={20} />
+                  </div>
+                </Event>
+              ))}
+
+            {!isLoading && formattedEvents.length === 0 && (
+              <LoaderContainer>
+                <img src={catImg} alt="A cat" />
+                <h2>No events...</h2>
+              </LoaderContainer>
+            )}
+
+            {isLoading && (
+              <LoaderContainer>
+                <Loader type="TailSpin" color="#2B63FF" />
+              </LoaderContainer>
+            )}
           </EventsList>
         </Main>
       </Content>

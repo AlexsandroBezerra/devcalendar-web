@@ -220,3 +220,17 @@ export const Event = styled.div`
     margin-top: 12px;
   }
 `
+
+export const LoaderContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  width: 100%;
+  height: 320px;
+
+  h2 {
+    margin-top: 48px;
+  }
+`
