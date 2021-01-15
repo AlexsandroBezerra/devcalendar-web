@@ -33,7 +33,7 @@ interface Event {
 }
 
 const Dashboard: React.FC = () => {
-  const { user, signOut } = useAuth()
+  const { user } = useAuth()
   const [selectedDate, setSelectedDate] = useState(new Date())
   const [isLoading, setIsLoading] = useState(true)
   const [events, setEvents] = useState<Event[]>([])
@@ -79,7 +79,7 @@ const Dashboard: React.FC = () => {
         <div>
           <img src={logoImg} alt="DevCalendar" />
 
-          <Link to="/app" onClick={signOut}>
+          <Link to="/profile">
             <strong>{user.name}</strong>
             <img src={user.avatarUrl} alt={user.name} />
           </Link>
