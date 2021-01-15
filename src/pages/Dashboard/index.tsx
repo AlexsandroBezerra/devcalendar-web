@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import DayPicker from 'react-day-picker'
 import { FiPlus, FiInfo } from 'react-icons/fi'
 import { Link } from 'react-router-dom'
@@ -7,6 +7,8 @@ import { format } from 'date-fns'
 
 import logoImg from '../../assets/logo.svg'
 import { useAuth } from '../../hooks/Auth'
+import api from '../../services/api'
+import convertTime from '../../utils/convertTime'
 
 import 'react-day-picker/lib/style.css'
 import {
@@ -20,9 +22,29 @@ import {
   Event
 } from './styles'
 
+interface Event {
+  id: string
+  title: string
+  from?: string
+  to?: string
+}
+
 const Dashboard: React.FC = () => {
   const { user, signOut } = useAuth()
   const [selectedDate, setSelectedDate] = useState(new Date())
+  const [events, setEvents] = useState<Event[]>([])
+
+  useEffect(() => {
+    api
+      .get('events', {
+        params: {
+          date: selectedDate
+        }
+      })
+      .then(response => {
+        setEvents(response.data)
+      })
+  }, [selectedDate])
 
   const handleDateChange = useCallback((day: Date) => {
     setSelectedDate(day)
@@ -35,6 +57,14 @@ const Dashboard: React.FC = () => {
   const selectedWeekDay = useMemo(() => {
     return format(selectedDate, 'cccc')
   }, [selectedDate])
+
+  const formattedEvents = useMemo(() => {
+    return events.map(event => ({
+      ...event,
+      from: event.from && convertTime(event.from),
+      to: event.to && convertTime(event.to)
+    }))
+  }, [events])
 
   return (
     <Container>
@@ -80,23 +110,18 @@ const Dashboard: React.FC = () => {
           </div>
 
           <EventsList>
-            <Event>
-              <strong>{"Mother's birthday"}</strong>
+            {formattedEvents.map(event => (
+              <Event key={event.id}>
+                <strong>{event.title}</strong>
 
-              <div>
-                <span></span>
-                <FiInfo size={20} />
-              </div>
-            </Event>
-
-            <Event>
-              <strong>{"Mother's birthday"}</strong>
-
-              <div>
-                <span>06:00PM - 11:59PM</span>
-                <FiInfo size={20} />
-              </div>
-            </Event>
+                <div>
+                  <span>
+                    {event.from && event.to && `${event.from} - ${event.to}`}
+                  </span>
+                  <FiInfo size={20} />
+                </div>
+              </Event>
+            ))}
           </EventsList>
         </Main>
       </Content>
