@@ -26,18 +26,12 @@
 </p>
 
 <p align="center">
-  <a href="#about-the-project">About the project</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#technologies">Technologies</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#getting-started">Getting started</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#how-to-contribute">How to contribute</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#license">License</a>
+  <a href="#-about-the-project">About the project</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#-technologies">Technologies</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#-getting-started">Getting started</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#-how-to-contribute">How to contribute</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
+  <a href="#-license">License</a>
 </p>
-
-<h2 align="center">🚧 Under development 🚧</h2>
-
-<p id="about-the-project"></p>
-
-<p id="about"></p>
 
 ## 💁 About the project
 
@@ -45,10 +39,7 @@ Soon
 
 ### 🔗 Useful link
 
-To see the **DevCalendar web client**, [click here](https://github.com/AlexsandroBezerra/devcalendar-web) <br />
-
-
-<p id="technologies"></p>
+To see the **DevCalendar api rest**, [click here](https://github.com/AlexsandroBezerra/devcalendar-server)
 
 ## 🚀 Technologies
 
@@ -63,11 +54,12 @@ Technologies that I used to develop this web client:
 - [Styled Components](https://styled-components.com/)
 - [Polished](https://github.com/styled-components/polished)
 - [Axios](https://github.com/axios/axios)
+- [Husky](https://github.com/typicode/husky)
+- [Commitlint](https://github.com/conventional-changelog/commitlint)
+- [Commitizen](https://github.com/commitizen/cz-cli)
 - [Eslint](https://eslint.org/)
 - [Prettier](https://prettier.io/)
 - [EditorConfig](https://editorconfig.org/)
-
-<p id="started"></p>
 
 ## 💻 Getting started
 
@@ -78,9 +70,9 @@ Technologies that I used to develop this web client:
 **Clone the project and access the folder**
 
 ```bash
-git clone https://github.com/AlexsandroBezerra/devcalendar-server.git
+git clone https://github.com/AlexsandroBezerra/devcalendar-web.git
 
-cd devcalendar-server
+cd devcalendar-web
 ```
 
 **Follow the steps below**
@@ -95,8 +87,6 @@ $ yarn
 $ yarn start
 ```
 
-<p id="contribute"></p>
-
 ## 🤔 How to contribute
 
 **Make a fork of this repository**
@@ -105,14 +95,14 @@ $ yarn start
 # Fork using GitHub official command line
 # If you don't have the GitHub CLI, use the web site to do that.
 
-$ gh repo fork AlexsandroBezerra/devcalendar-server
+$ gh repo fork AlexsandroBezerra/devcalendar-web
 ```
 
 **Follow the steps below**
 
 ```bash
 # Clone your fork
-$ git clone your-fork-url && cd devcalendar-server
+$ git clone your-fork-url && cd devcalendar-web
 
 # Create a branch with your feature
 $ git checkout -b my-feature
@@ -125,9 +115,6 @@ $ git push origin my-feature
 ```
 
 After your pull request is merged, you can delete your branch
-
-
-<p id="license"></p>
 
 ## 📝 License
 
